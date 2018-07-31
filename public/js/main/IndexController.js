@@ -13,6 +13,15 @@ export default function IndexController(container) {
 
 IndexController.prototype._registerServiceWorker = function() {
   // TODO: register service worker
+  if (!navigator.serviceWorker) return;
+  navigator.serviceWorker
+    .register('/sw.js')
+    .then(function() {
+      console.log('SW successfully registered!');
+    })
+    .catch(function() {
+      console.log('SW registration failed');
+    });
 };
 
 // open a connection to the server for live updates
@@ -50,7 +59,7 @@ IndexController.prototype._openSocket = function() {
   ws.addEventListener('close', function() {
     // tell the user
     if (!indexController._lostConnectionToast) {
-      indexController._lostConnectionToast = indexController._toastsView.show("Unable to connect. Retrying…");
+      indexController._lostConnectionToast = indexController._toastsView.show('Unable to connect. Retrying…');
     }
 
     // try and reconnect in 5 seconds
